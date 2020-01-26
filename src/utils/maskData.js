@@ -1,5 +1,7 @@
+import urls from './urls';
+
 export default {
-    baseUrl: "https://zamhown.github.io/wear-a-mask/masks/",
+    baseUrl: urls.maskBaseUrl,
     // 数据要求：leftPoint和rightPoint必须同高
     // side：0正面，1左侧面，2右侧面
     masks: [

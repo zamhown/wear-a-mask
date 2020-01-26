@@ -74,7 +74,7 @@ html, body, p, ul, li {
   display: block;
   position: absolute;
   top: 0px;
-  right: 15px;
+  right: 20px;
   background: #f2bb43;
   color: white;
   text-decoration: none;

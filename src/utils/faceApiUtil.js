@@ -1,9 +1,9 @@
-/* eslint-disable no-console, no-unused-vars */
+/* eslint-disable no-console */
 import * as faceapi from 'face-api.js';
 import maskHelper from './maskHelper';
+import urls from './urls';
 
-const modelUrl = 'https://zamhown.github.io/wear-a-mask/weights';
-// 'https://raw.githubusercontent.com/justadudewhohacks/face-api.js/master/weights'
+const modelUrl = urls.modelBaseUrl;
 
 export default {
   detectPic(img, canvasModel, realImgInfo, callback, onFailed) {

@@ -667,21 +667,36 @@ class StickerCanvas {
     // 将当前画布的图像导出为png
     export() {
         const canvas = document.createElement('canvas');
-        const tmp = this.current;
-        this.current = null;
-        this.draw();
 
-        const rect = this.layers[0].rect;
-        canvas.width = rect.width;
-        canvas.height = rect.height;
-        const imgData = this.context.getImageData(
-            rect.center[0] - rect.width / 2,
-            rect.center[1] - rect.height / 2,
-            rect.width, rect.height);
-        canvas.getContext('2d').putImageData(imgData, 0, 0);
+        const bg = this.layers[0];
+        canvas.width = bg.image.width;
+        canvas.height = bg.image.height;
+        const context = canvas.getContext('2d');
+        context.drawImage(bg.image, 0, 0, bg.image.width, bg.image.height,
+            0, 0, canvas.width, canvas.height);
+        const xRate = bg.image.width / bg.rect.width;
+        const yRate = bg.image.height / bg.rect.height;
+        const xOffset = bg.rect.center[0] - bg.rect.width / 2;
+        const yOffset = bg.rect.center[1] - bg.rect.height / 2;
         
-        this.current = tmp;
-        this.draw();
+        if (this.layers[1]) {
+            const fg = this.layers[1];
+            const points = fg.rect.points;
+            let [c_x, c_y] = fg.rect.center;
+            c_x = (c_x - xOffset) * xRate;
+            c_y = (c_y - yOffset) * yRate;
+            context.save();
+            context.translate(c_x, c_y);
+            context.rotate(fg.rect.angle);
+            context.scale(Math.sign(fg.rect.width), Math.sign(fg.rect.height))
+            context.drawImage(fg.image, 0, 0, fg.image.width, fg.image.height,
+                (points[0][0] - xOffset) * xRate - c_x,
+                (points[0][1] - yOffset) * yRate - c_y,
+                fg.rect.width * xRate,
+                fg.rect.height * yRate);
+            context.restore();
+        }
+        
         return canvas.toDataURL("image/png");
     }
 
