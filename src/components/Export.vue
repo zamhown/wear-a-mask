@@ -1,6 +1,6 @@
 <template>
   <div id="export">
-    <p class="img-container"><img :src="imgUrl"></p>
+    <p class="img-container" ref="ic"><img :src="imgUrl" :style="imgStyle"></p>
     <p class="title">长按或右键保存图片</p>
     <p class="control">
       <button @click="backToEditor">继续编辑</button>
@@ -11,12 +11,18 @@
 
 <script>
 /* eslint-disable no-console, no-unused-vars */
+import { mapState } from 'vuex';
 
 export default {
   data() {
     return {
-      imgUrl: this.$store.state.exportData.url
+      imgStyle: {}
     }
+  },
+  computed: {
+    ...mapState({
+      imgUrl: state => state.exportData.url
+    })
   },
   methods: {
     backToIndex () {
@@ -29,6 +35,21 @@ export default {
   created () {
     if (!this.$store.state.exportData) {
       this.$emit('navTo', 'index');
+    }
+  },
+  mounted () {
+    const cw = this.$refs.ic.clientWidth;
+    const ch = this.$refs.ic.clientHeight;
+    const iw = this.$store.state.exportData.width;
+    const ih = this.$store.state.exportData.height;
+    if (cw / ch < iw / ih) {
+      this.imgStyle = {
+        width: '100%'
+      }
+    } else {
+      this.imgStyle = {
+        height: '100%'
+      }
     }
   }
 }
@@ -54,7 +75,6 @@ export default {
 }
 img {
   display: block;
-  width: 100%;
   margin: 0px auto;
   position: relative;
   top: 50%;

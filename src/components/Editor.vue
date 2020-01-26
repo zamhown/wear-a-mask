@@ -126,8 +126,8 @@ export default {
     save () {
       this.$store.commit('setExportData', {
         url: this.editor.export(),
-        width: this.realImgInfo.width,
-        height: this.realImgInfo.height
+        width: this.editor.layers[0].image.width,
+        height: this.editor.layers[0].image.height
       });
       this.$emit('navTo', 'export');
     }
