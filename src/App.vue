@@ -6,7 +6,7 @@
     </div>
     <div id="contentContainer">
       <div id="content">
-        <Index v-if="nav=='index'" @navTo="navTo" />
+        <Index v-show="nav=='index'" @navTo="navTo" />
         <Editor v-show="nav=='editor'" :fileId="currentFileId" @navTo="navTo" />
         <Export v-if="nav=='export'" @navTo="navTo" />
       </div>
