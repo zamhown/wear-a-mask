@@ -1,7 +1,5 @@
 .DS_Store
 node_modules
-/weights
-/masks
 
 # local env files
 .env.local
