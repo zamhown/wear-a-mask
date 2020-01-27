@@ -57,6 +57,7 @@ html, body, p, ul, li {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
+  background: white;
   color: #2c3e50;
 }
 #header, #contentContainer {

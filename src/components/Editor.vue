@@ -124,11 +124,7 @@ export default {
       this.$emit('navTo', 'index');
     },
     save () {
-      this.$store.commit('setExportData', {
-        url: this.editor.export(),
-        width: this.editor.layers[0].image.width,
-        height: this.editor.layers[0].image.height
-      });
+      this.$store.commit('setEditor', this.editor);
       this.$emit('navTo', 'export');
     }
   },

@@ -5,7 +5,7 @@
     <p class="slogan"><span v-if="!wide" v-html="space"></span>给社交网络头像戴上口罩，<br v-if="!wide"><span v-if="!wide" v-html="space"></span>提醒更多人关注身体健康。</p>
     <div class="upload">
       <span>选择图片</span>
-      <input type="file" class="upload" @change="addImg" ref="inputer" accept="image/png,image/jpeg,image/gif,image/jpg"/>
+      <input type="file" class="upload" @change="addImg" ref="inputer" accept="image/*" />
     </div>
     <p class="description">此页面可以在你的头像上自动P上口罩，你还可以对口罩的位置和大小进行编辑。</p>
     <p class="description">人脸检测算法基于SSD MobileNet V1神经网络模型，无需上传图片，也不会保留任何数据。</p>

@@ -1,28 +1,35 @@
 <template>
   <div id="export">
-    <p class="img-container" ref="ic"><img :src="imgUrl" :style="imgStyle"></p>
-    <p class="title">长按或右键保存图片</p>
-    <p class="control">
-      <button @click="backToEditor">继续编辑</button>
-      <button @click="backToIndex">重选图片</button>
-    </p>
+    <div id="exportUI" :class="{'loading': loading}">
+      <p class="img-container" ref="ic"><img :src="imgUrl" :style="imgStyle" :load="loading=false"></p>
+      <div class="title" ref="title">
+        <p>长按或右键保存下方图片</p>
+        <div class="control">
+          <button @click="backToEditor">继续编辑</button>
+          <button @click="backToIndex">重选图片</button>
+        </div>
+      </div>
+    </div>
+    <div v-if="loading" id="loading">
+      <div>
+        <p>
+          <b>正在导出中……</b>
+        </p>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-/* eslint-disable no-console, no-unused-vars */
-import { mapState } from 'vuex';
+/* eslint-disable no-console */
 
 export default {
   data() {
     return {
-      imgStyle: {}
+      imgUrl: '',
+      imgStyle: {},
+      loading: true
     }
-  },
-  computed: {
-    ...mapState({
-      imgUrl: state => state.exportData.url
-    })
   },
   methods: {
     backToIndex () {
@@ -33,72 +40,99 @@ export default {
     }
   },
   created () {
-    if (!this.$store.state.exportData) {
+    if (!this.$store.state.editor) {
       this.$emit('navTo', 'index');
     }
   },
   mounted () {
     const cw = this.$refs.ic.clientWidth;
-    const ch = this.$refs.ic.clientHeight;
-    const iw = this.$store.state.exportData.width;
-    const ih = this.$store.state.exportData.height;
-    if (cw / ch < iw / ih) {
-      this.imgStyle = {
-        width: '100%'
-      }
-    } else {
-      this.imgStyle = {
-        height: '100%'
-      }
+    const ch = this.$refs.ic.clientHeight - this.$refs.title.clientHeight;
+    const iw = this.$store.state.editor.layers[0].image.width;
+    const ih = this.$store.state.editor.layers[0].image.height;
+    const xRate = cw / iw;
+    const yRate = ch / ih;
+    const setRate = xRate < yRate ? xRate : yRate;
+    const imgWidth = iw * setRate;
+    const imgHeight = ih * setRate;
+    const imgX = (cw - imgWidth) / 2;
+    const imgY = (ch - imgHeight) / 2 + this.$refs.title.clientHeight;
+    this.imgStyle = {
+      width: imgWidth + 'px',
+      height: imgHeight + 'px',
+      left: imgX + 'px',
+      top: imgY + 'px'
     }
+    this.imgUrl = this.$store.state.editor.export()
   }
 }
 </script>
 
 <style scoped>
-#export {
+#export, #exportUI {
   position: relative;
+  width: 100%;
   height: 100%;
   overflow: hidden;
 }
 .title {
   position: absolute;
   width: 100%;
-  height: 30px;
+  height: 90px;
   top: 0px;
   background: #ff664d;
+}
+.title p {
   color: white;
   line-height: 30px;
 }
 .img-container {
   height: 100%;
+  position: relative;
 }
 img {
   display: block;
-  margin: 0px auto;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
+  position: absolute;
 }
 .control {
-  position: absolute;
   width: 100%;
   height: 60px;
-  bottom: 0px;
+  background: #ffbbb4;
 }
 button {
   width: 120px;
   height: 40px;
   margin: 10px;
-  background: #ff8571;
-  color: white;
+  background: white;
   border-radius: 20px;
   appearance: none;
   border: none;
   font-size: 16px;
-  box-shadow: 0px 0px 10px #ccc;
+  box-shadow: 0px 0px 5px #888;
 }
 button:hover {
-  background: #ff664d;
+  background: #f5dcd9;
+}
+#exportUI.loading {
+  filter: blur(20px);
+}
+#loading {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+}
+#loading > div {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  height: 50px;
+  padding: 10px;
+  margin: -25px 0px 0px -100px;
+  background: white;
+  border-radius: 5px;
+  font-size: 16px;
+  line-height: 30px;
+  box-shadow: 0px 0px 10px #ccc;
 }
 </style>
