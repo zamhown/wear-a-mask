@@ -1,7 +1,7 @@
 <template>
   <div id="export">
     <div id="exportUI" :class="{'loading': loading}">
-      <p class="img-container" ref="ic"><img :src="imgUrl" :style="imgStyle" :load="loading=false"></p>
+      <p class="img-container" ref="ic"><img :src="imgUrl" :style="imgStyle" @load="onImgLoaded"></p>
       <div class="title" ref="title">
         <p>长按或右键保存下方图片</p>
         <div class="control">
@@ -32,6 +32,12 @@ export default {
     }
   },
   methods: {
+    onImgLoaded () {
+      console.log(this.imgUrl);
+      if (this.imgUrl) {
+        this.loading = false;
+      }
+    },
     backToIndex () {
       this.$emit('navTo', 'index');
     },
@@ -62,7 +68,9 @@ export default {
       left: imgX + 'px',
       top: imgY + 'px'
     }
-    this.imgUrl = this.$store.state.editor.export()
+    setTimeout(() => {
+      this.imgUrl = this.$store.state.editor.export();
+    }, 300);  // 留时间刷新界面
   }
 }
 </script>
@@ -96,7 +104,7 @@ img {
 .control {
   width: 100%;
   height: 60px;
-  background: #ffbbb4;
+  background: #ff9c92;
 }
 button {
   width: 120px;

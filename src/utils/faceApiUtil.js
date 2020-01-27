@@ -6,7 +6,14 @@ import urls from './urls';
 const modelUrl = urls.modelBaseUrl;
 
 export default {
-  detectPic(img, canvasModel, realImgInfo, callback, onFailed) {
+  modelsLoaded: false,
+  modelsLoading: false,
+  onModelsLoaded: null,
+  onModelsLoadErr: null,
+  loadModels () {
+    if (this.modelsLoading || this.modelsLoaded) {
+      return;
+    }
     let failed = false;
     const onLoadErr = () => { failed = true; };
     
@@ -24,22 +31,45 @@ export default {
       //faceapi.nets.tinyFaceDetector.loadFromUri(modelUrl).catch(onLoadErr),
       //faceapi.nets.mtcnn.loadFromUri(modelUrl).catch(onLoadErr)
     ]).then(async () => {
-      if (!failed) {
-        //设置需要使用什么算法和参数进行扫描识别图片的人脸特征
-        const options = new faceapi.SsdMobilenetv1Options({ minConfidence: 0.2 })
-        //const options = new faceapi.TinyFaceDetectorOptions({ inputSize: 160, scoreThreshold: 0.3})
-        //const options = new faceapi.MtcnnOptions()
-        let result = await faceapi.detectSingleFace(img, options).withFaceLandmarks()
-        console.log(result)
-        if (result) {
-          let maskInfo = maskHelper.wearAMaskAfterFaceDetection(result, canvasModel, realImgInfo);
-          // this.drawFaceLandmarks(canvasModel.canvas, [result], realImgInfo)
-          if (callback) {
-            callback(maskInfo);
-          }
-        } else if (onFailed) { onFailed('no result'); }
-      } else if (onFailed) { onFailed('no result'); }
+      this.modelsLoading = false;
+      this.modelsLoaded = !failed;
+      if (!failed && this.onModelsLoaded) {
+        this.onModelsLoaded();
+        this.onModelsLoaded = null;
+      } else if (failed && this.onModelsLoadErr) {
+        this.onModelsLoadErr();
+        this.onModelsLoadErr = null;
+      }
     });
+  },
+  detectPic(img, canvasModel, realImgInfo, callback, onFailed) {
+    const process = async () => {
+      //设置需要使用什么算法和参数进行扫描识别图片的人脸特征
+      const options = new faceapi.SsdMobilenetv1Options({ minConfidence: 0.2 })
+      //const options = new faceapi.TinyFaceDetectorOptions({ inputSize: 160, scoreThreshold: 0.3})
+      //const options = new faceapi.MtcnnOptions()
+      let result = await faceapi.detectSingleFace(img, options).withFaceLandmarks()
+      console.log(result)
+      if (result) {
+        let maskInfo = maskHelper.wearAMaskAfterFaceDetection(result, canvasModel, realImgInfo);
+        // this.drawFaceLandmarks(canvasModel.canvas, [result], realImgInfo)
+        if (callback) {
+          callback(maskInfo);
+        }
+      } else if (onFailed) { onFailed('no result'); }
+    }
+    const processOnFailed = () => { if (onFailed) { onFailed('no result'); } };
+
+    if (this.modelsLoading) {
+      this.onModelsLoaded = process;
+      this.onModelsLoadErr = processOnFailed;
+    } else if (!this.modelsLoaded) {
+      this.onModelsLoaded = process;
+      this.onModelsLoadErr = processOnFailed;
+      this.loadModels();
+    } else {
+      process();
+    }
   },
   drawFaceLandmarks(canvas, result, realImgInfo) {
     let ctx = canvas.getContext("2d");

@@ -99,14 +99,16 @@ export default {
             position: [imgX, imgY]
           };
           self.loading = true;
-          faceApiUtil.detectPic(img, editor, self.realImgInfo, maskInfo => {
-            self.maskInfo = maskInfo;
-            self.loading = false;
-          }, e => {
-            console.log(e);
-            self.maskInfo = maskHelper.wearAMaskAsAFool(self.editor, self.realImgInfo);
-            self.loading = false;
-          });
+          setTimeout(() => {
+            faceApiUtil.detectPic(img, editor, self.realImgInfo, maskInfo => {
+              self.maskInfo = maskInfo;
+              self.loading = false;
+            }, e => {
+              console.log(e);
+              self.maskInfo = maskHelper.wearAMaskAsAFool(self.editor, self.realImgInfo);
+              self.loading = false;
+            });
+          }, 300);  // 留时间刷新界面
         }
       }
     },
