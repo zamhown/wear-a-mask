@@ -17,6 +17,7 @@ export default {
     let failed = false;
     const onLoadErr = () => { failed = true; };
     
+    this.modelsLoading = true;
     // 加载训练好的模型(weight，bias)
     // faceLandmark68Net 识别脸部特征用于mobilenet算法
     // faceLandmark68TinyNet 识别脸部特征用于tiny算法
