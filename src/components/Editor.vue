@@ -39,6 +39,7 @@ import faceApiUtil from '../utils/faceApiUtil';
 import StickerCanvas from '../utils/stickerCanvas';
 import maskData from '../utils/maskData';
 import maskHelper from '../utils/maskHelper';
+import EXIF from 'exif-js';
 
 export default {
   props: {
@@ -72,45 +73,82 @@ export default {
       });
       const editor = this.editor;
       const self = this;
-      const reader = new FileReader();
-      reader.readAsDataURL(file);  // 发起异步请求
-      reader.onload = function () {
-        const img = new Image();
-        img.src = this.result;
-        img.onload = function () {
-          // 等比例缩放图片
-          const xRate = editor.width / img.width;
-          const yRate = editor.height / img.height;
-          const setRate = xRate < yRate ? xRate : yRate;
-          const imgWidth = img.width * setRate;
-          const imgHeight = img.height * setRate;
-          const imgX = (editor.width - imgWidth) / 2;
-          const imgY = (editor.height - imgHeight) / 2;
-          editor.addPhoto(img, {
-            width: imgWidth,
-            height: imgHeight,
-            centerX: editor.width / 2,
-            centerY: editor.height / 2,
-            angle: 0
-          }, false);
-          self.realImgInfo = {
-            width: imgWidth,
-            height: imgHeight,
-            position: [imgX, imgY]
-          };
-          self.loading = true;
-          setTimeout(() => {
-            faceApiUtil.detectPic(img, editor, self.realImgInfo, maskInfo => {
-              self.maskInfo = maskInfo;
-              self.loading = false;
-            }, e => {
-              console.log(e);
-              self.maskInfo = maskHelper.wearAMaskAsAFool(self.editor, self.realImgInfo);
-              self.loading = false;
-            });
-          }, 300);  // 留时间刷新界面
+      //获取图片Orientation参数
+      EXIF.getData(file, function () {
+        console.log(EXIF.getAllTags(this));
+        const EXIF_orientation = EXIF.getTag(this, 'Orientation');  // 解决移动设备照片方向问题
+        const reader = new FileReader();
+        reader.readAsDataURL(file);  // 发起异步请求
+        reader.onload = function () {
+          const img = new Image();
+          img.src = this.result;
+          img.onload = function () {
+            let width = img.width;
+            let height = img.height;
+            let angle = 0;
+            let orientation = 0;
+            if(EXIF_orientation && EXIF_orientation != 1){
+              switch(EXIF_orientation){
+                // 旋转90度
+                case 6:
+                  angle = Math.PI / 2;
+                  width = img.height;
+                  height = img.width;
+                  orientation = 90;
+                  break;
+                // 旋转180度
+                case 3:
+                  angle = Math.PI;
+                  orientation = 180;
+                  break;
+                // 旋转270度
+                case 8:
+                  angle = 3 * Math.PI / 2;
+                  width = img.height;
+                  height = img.width;
+                  orientation = 270;
+                  break;
+              }
+            }
+            // 等比例缩放图片
+            const xRate = editor.width / width;
+            const yRate = editor.height / height;
+            const setRate = xRate < yRate ? xRate : yRate;
+            const imgWidth = width * setRate;
+            const imgHeight = height * setRate;
+            const imgX = (editor.width - imgWidth) / 2;
+            const imgY = (editor.height - imgHeight) / 2;
+            editor.addPhoto(img, {
+              width: img.width * setRate,
+              height: img.height * setRate,
+              centerX: editor.width / 2,
+              centerY: editor.height / 2,
+              angle: angle
+            }, false, orientation);
+            self.realImgInfo = {
+              width: imgWidth,
+              height: imgHeight,
+              position: [imgX, imgY]
+            };
+            self.loading = true;
+
+            setTimeout(() => {    
+              const rimg = new Image();
+              rimg.src = editor.export();  // 放进算法前导出一次确保图片方向正确
+              rimg.onload = function () {
+                faceApiUtil.detectPic(rimg, editor, self.realImgInfo, maskInfo => {
+                  self.maskInfo = maskInfo;
+                  self.loading = false;
+                }, e => {
+                  console.log(e);
+                  self.maskInfo = maskHelper.wearAMaskAsAFool(self.editor, self.realImgInfo);
+                  self.loading = false;
+                });
+              }
+            }, 300);  // 留时间刷新界面
+          }
         }
-      }
+      });
     },
     resumeMask () {
       if (this.maskInfo && this.editor) {

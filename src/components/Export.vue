@@ -33,7 +33,6 @@ export default {
   },
   methods: {
     onImgLoaded () {
-      console.log(this.imgUrl);
       if (this.imgUrl) {
         this.loading = false;
       }
@@ -53,8 +52,13 @@ export default {
   mounted () {
     const cw = this.$refs.ic.clientWidth;
     const ch = this.$refs.ic.clientHeight - this.$refs.title.clientHeight;
-    const iw = this.$store.state.editor.layers[0].image.width;
-    const ih = this.$store.state.editor.layers[0].image.height;
+    const bg = this.$store.state.editor.layers[0];
+    let iw = bg.image.width;
+    let ih = bg.image.height;
+    if (bg.orientation == 90 || bg.orientation == 270) {
+      iw = bg.image.height;
+      ih = bg.image.width;
+    }
     const xRate = cw / iw;
     const yRate = ch / ih;
     const setRate = xRate < yRate ? xRate : yRate;

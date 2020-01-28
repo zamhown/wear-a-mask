@@ -311,15 +311,17 @@ class Photo {
     id  图片id
     options  Photo对象
     rect  Rect对象，代表图像位置
+    orientation  图片的初始旋转角度（0，90，180，270，渲染时不会做变换，仅记录）
     canEdit  图片是否可以编辑
     */
-    constructor(image, canvas, onload = null, rect = null, canEdit = true) {
+    constructor(image, canvas, onload = null, rect = null, canEdit = true, orientation = 0) {
         this.canvas = canvas;
         this.imgInput = image;
         this.image = null;
         this.onLoad = onload;
         this.rect = rect;
         this.canEdit = canEdit;
+        this.orientation = orientation;
         this.id = new Date().getTime();
         this.isLoad = false;
         if (image instanceof Photo) {
@@ -459,7 +461,7 @@ class StickerCanvas {
                         this.draw();
                     }
                 }, 100);
-            }, image.rect, image.canEdit);
+            }, image.rect, image.canEdit, image.orientation);
             this.layers.push(lyr);
         };
 
@@ -598,7 +600,7 @@ class StickerCanvas {
         this.draw();
     }
     // 添加图片
-    addPhoto(image, rectOptions = null, canEdit = true) {
+    addPhoto(image, rectOptions = null, canEdit = true, orientation = 0) {
         let rect = null;
         if (rectOptions) {
             rect = new Rect(rectOptions.width,
@@ -615,10 +617,10 @@ class StickerCanvas {
                         this.draw();
                     }
                 }, 100);
-            }, rect, canEdit);
+            }, rect, canEdit, orientation);
             this.layers.push(lyr);
         } else {
-            const lyr = new Photo(image, this, null, rect, canEdit);
+            const lyr = new Photo(image, this, null, rect, canEdit, orientation);
             this.layers.push(lyr);
             this.draw();
         }
@@ -663,21 +665,36 @@ class StickerCanvas {
         this.layers.splice(index, 1);
         this.draw();
     }
-
     // 将当前画布的图像导出为png
     export() {
         const canvas = document.createElement('canvas');
 
         const bg = this.layers[0];
-        canvas.width = bg.image.width;
-        canvas.height = bg.image.height;
+        if (bg.orientation == 90 || bg.orientation == 270) {
+            canvas.width = bg.image.height;
+            canvas.height = bg.image.width;
+        } else {    
+            canvas.width = bg.image.width;
+            canvas.height = bg.image.height;
+        }
         const context = canvas.getContext('2d');
+        context.save();
+        context.translate(canvas.width / 2, canvas.height / 2);
+        context.rotate(bg.rect.angle);
         context.drawImage(bg.image, 0, 0, bg.image.width, bg.image.height,
-            0, 0, canvas.width, canvas.height);
-        const xRate = bg.image.width / bg.rect.width;
-        const yRate = bg.image.height / bg.rect.height;
-        const xOffset = bg.rect.center[0] - bg.rect.width / 2;
-        const yOffset = bg.rect.center[1] - bg.rect.height / 2;
+            -bg.image.width / 2, -bg.image.height / 2, bg.image.width, bg.image.height);
+        context.restore();
+        
+        let xRate = bg.image.width / bg.rect.width;
+        let yRate = bg.image.height / bg.rect.height;
+        let xOffset = bg.rect.center[0] - bg.rect.width / 2;
+        let yOffset = bg.rect.center[1] - bg.rect.height / 2;
+        if (bg.orientation == 90 || bg.orientation == 270) {
+            xRate = bg.image.height / bg.rect.height;
+            yRate = bg.image.width / bg.rect.width;
+            xOffset = bg.rect.center[0] - bg.rect.height / 2;
+            yOffset = bg.rect.center[1] - bg.rect.width / 2;
+        }
         
         if (this.layers[1]) {
             const fg = this.layers[1];
@@ -699,7 +716,6 @@ class StickerCanvas {
         
         return canvas.toDataURL("image/png");
     }
-
     // 清理画布
     clear() {
         // Store the current transformation matrix
@@ -710,6 +726,7 @@ class StickerCanvas {
         // Restore the transform
         this.context.restore();
     }
+
     save() {
         const data = this.layers.map((item) => {
             const { rect, id, img } = item;
@@ -717,6 +734,7 @@ class StickerCanvas {
         });
        return data;
     }
+
     draw() {
         this.clear();
         this.layers.forEach(item => {
