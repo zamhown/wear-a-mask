@@ -1,20 +1,18 @@
 <template>
-  <div id="export">
-    <div id="exportUI" :class="{'loading': loading}">
+  <div id="share">
+    <div id="shareUI" :class="{'loading': loading}">
       <p class="img-container" ref="ic"><img :src="imgUrl" :style="imgStyle" @load="onImgLoaded"></p>
-      <button id="shareBtn" @click="share">分享</button>
       <div class="title" ref="title">
-        <p>长按或右键保存下方图片</p>
-        <div class="control">
-          <button @click="backToEditor">继续编辑</button>
-          <button @click="backToIndex">重选图片</button>
-        </div>
+        <p>保存下方图片，分享给朋友吧！</p>
+      </div>
+      <div class="control">
+        <button @click="back">返回</button>
       </div>
     </div>
     <div v-if="loading" id="loading">
       <div>
         <p>
-          <b>正在导出中……</b>
+          <b>正在生成中……</b>
         </p>
       </div>
     </div>
@@ -23,67 +21,74 @@
 
 <script>
 /* eslint-disable no-console */
-import { mapState } from 'vuex';
 import util from '../utils/util';
 
 export default {
   data() {
     return {
+      imgUrl: '',
       imgStyle: {},
       loading: true
     }
   },
-  computed: mapState({
-    imgUrl: 'finishImg'
-  }),
   methods: {
     onImgLoaded () {
       if (this.imgUrl) {
         this.loading = false;
       }
     },
-    backToIndex () {
-      this.$emit('navTo', 'index');
-    },
-    backToEditor () {
-      this.$emit('navTo', 'editor');
-    },
-    share () {
-      this.$emit('navTo', 'share');
+    back () {
+      this.$emit('navTo', 'export');
     }
   },
   created () {
-    if (!this.$store.state.editor) {
+    if (!this.$store.state.finishImg) {
       this.$emit('navTo', 'index');
     }
   },
   mounted () {
     this.loading = true;
-    const cw = this.$refs.ic.clientWidth;
-    const ch = this.$refs.ic.clientHeight - this.$refs.title.clientHeight;
-    const bg = this.$store.state.editor.layers[0];
-    let iw = bg.image.width;
-    let ih = bg.image.height;
-    if (bg.orientation == 90 || bg.orientation == 270) {
-      iw = bg.image.height;
-      ih = bg.image.width;
-    }
-    const {imgWidth, imgHeight, imgX, imgY} = util.imgContain(cw, ch, iw, ih);
-    this.imgStyle = {
-      width: imgWidth + 'px',
-      height: imgHeight + 'px',
-      left: imgX + 'px',
-      top: (imgY + this.$refs.title.clientHeight) + 'px'
-    }
     setTimeout(() => {
-      this.$store.commit('setFinishImg', this.$store.state.editor.export());
+      const self = this;
+      const img = new Image();
+      img.src = this.$store.state.finishImg;
+      img.onload = function () {
+        util.getShareImageSrc(sUrl => {
+          const simg = new Image();
+          simg.src = sUrl;
+          simg.onload = function () {
+            const {imgWidth, imgHeight, imgX, imgY} =
+              util.imgContain(self.$refs.ic.clientWidth, self.$refs.ic.clientHeight - self.$refs.title.clientHeight,
+              simg.width, simg.height);
+            self.imgStyle = {
+              width: imgWidth + 'px',
+              height: imgHeight + 'px',
+              left: imgX + 'px',
+              top: (imgY + self.$refs.title.clientHeight) + 'px'
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = simg.width;
+            canvas.height = simg.height;
+            const context = canvas.getContext('2d');
+            context.drawImage(simg, 0, 0, simg.width, simg.height,
+                0, 0, canvas.width, canvas.height);
+            const [x0, y0] = [157, 272];  // 插图区域左上角点
+            const [x1, y1] = [610, 679];  // 插图区域右下角点
+            const rect = util.imgContain(x1 - x0, y1 - y0, img.width, img.height);
+            context.drawImage(img, 0, 0, img.width, img.height,
+                rect.imgX + x0, rect.imgY + y0, rect.imgWidth, rect.imgHeight);
+            self.imgUrl = canvas.toDataURL("image/png");
+          }
+        });
+      }
     }, 300);  // 留时间刷新界面
   }
 }
 </script>
 
 <style scoped>
-#export, #exportUI {
+#share, #shareUI {
   position: relative;
   width: 100%;
   height: 100%;
@@ -92,7 +97,7 @@ export default {
 .title {
   position: absolute;
   width: 100%;
-  height: 90px;
+  height: 30px;
   top: 0px;
   background: #ff664d;
 }
@@ -103,6 +108,7 @@ export default {
 .img-container {
   height: 100%;
   position: relative;
+  background: #ff9c92;
 }
 img {
   display: block;
@@ -111,7 +117,8 @@ img {
 .control {
   width: 100%;
   height: 60px;
-  background: #ff9c92;
+  position: absolute;
+  bottom: 0;
 }
 button {
   width: 120px;
@@ -131,7 +138,7 @@ button:hover {
   position: absolute;
   bottom: 0px;
   right: 0px;
-  width: 60px;
+  width: 95px;
   height: 25px;
   margin: 10px;
   background: white;
@@ -142,7 +149,7 @@ button:hover {
   box-shadow: 0px 0px 5px #ccc;
   opacity: 0.6;
 }
-#exportUI.loading {
+#shareUI.loading {
   filter: blur(20px);
 }
 #loading {

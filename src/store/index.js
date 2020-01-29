@@ -6,7 +6,8 @@ Vue.use(Vuex)
 // initial state
 const state = {
   userImgInfo: null,
-  editor: null
+  editor: null,
+  finishImg: null
 }
 
 // getters
@@ -22,6 +23,9 @@ const mutations = {
   },
   setEditor (state, data) {
     state.editor = data
+  },
+  setFinishImg (state, data) {
+    state.finishImg = data
   }
 }
 

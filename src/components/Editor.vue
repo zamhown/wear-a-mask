@@ -39,6 +39,7 @@ import faceApiUtil from '../utils/faceApiUtil';
 import StickerCanvas from '../utils/stickerCanvas';
 import maskData from '../utils/maskData';
 import maskHelper from '../utils/maskHelper';
+import util from '../utils/util';
 import EXIF from 'exif-js';
 
 export default {
@@ -111,16 +112,10 @@ export default {
               }
             }
             // 等比例缩放图片
-            const xRate = editor.width / width;
-            const yRate = editor.height / height;
-            const setRate = xRate < yRate ? xRate : yRate;
-            const imgWidth = width * setRate;
-            const imgHeight = height * setRate;
-            const imgX = (editor.width - imgWidth) / 2;
-            const imgY = (editor.height - imgHeight) / 2;
+            const {imgWidth, imgHeight, imgX, imgY, rate} = util.imgContain(editor.width, editor.height, width, height);
             editor.addPhoto(img, {
-              width: img.width * setRate,
-              height: img.height * setRate,
+              width: img.width * rate,
+              height: img.height * rate,
               centerX: editor.width / 2,
               centerY: editor.height / 2,
               angle: angle

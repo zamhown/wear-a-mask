@@ -9,6 +9,7 @@
         <Index v-show="nav=='index'" @navTo="navTo" />
         <Editor v-show="nav=='editor'" :fileId="currentFileId" @navTo="navTo" />
         <Export v-if="nav=='export'" @navTo="navTo" />
+        <Share v-if="nav=='share'" @navTo="navTo" />
       </div>
     </div>
   </div>
@@ -18,13 +19,15 @@
 import Index from './components/Index.vue'
 import Editor from './components/Editor.vue'
 import Export from './components/Export.vue'
+import Share from './components/Share.vue'
 
 export default {
   name: 'app',
   components: {
     Index,
     Editor,
-    Export
+    Export,
+    Share
   },
   data() {
     return {

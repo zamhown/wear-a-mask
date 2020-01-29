@@ -175,6 +175,6 @@ export default {
             xhr.responseType = 'blob';
             xhr.send();
         }
-    },
+    }
 }
 
