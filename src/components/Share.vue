@@ -5,7 +5,7 @@
       <div class="title" ref="title">
         <p>保存下方图片，分享给朋友吧！</p>
       </div>
-      <div class="control">
+      <div class="control" ref="control">
         <button @click="back">返回</button>
       </div>
     </div>
@@ -58,7 +58,8 @@ export default {
           simg.src = sUrl;
           simg.onload = function () {
             const {imgWidth, imgHeight, imgX, imgY} =
-              util.imgContain(self.$refs.ic.clientWidth, self.$refs.ic.clientHeight - self.$refs.title.clientHeight,
+              util.imgContain(self.$refs.ic.clientWidth,
+              self.$refs.ic.clientHeight - self.$refs.title.clientHeight - self.$refs.control.clientHeight,
               simg.width, simg.height);
             self.imgStyle = {
               width: imgWidth + 'px',
