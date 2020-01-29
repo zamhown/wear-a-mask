@@ -20,11 +20,22 @@ export default {
             xhr.send();
         }
     },
-    // 排版图片，填充容器并居中（图片长边与容器短边对齐）
+    // 排版图片，填充容器并居中（图片完整显示，留空白）
     imgContain(cw, ch, iw, ih) {
         const xRate = cw / iw;
         const yRate = ch / ih;
         const setRate = xRate < yRate ? xRate : yRate;
+        const imgWidth = iw * setRate;
+        const imgHeight = ih * setRate;
+        const imgX = (cw - imgWidth) / 2;
+        const imgY = (ch - imgHeight) / 2;
+        return {imgWidth, imgHeight, imgX, imgY, rate: setRate};
+    },
+    // 排版图片，填充容器并居中（图片不留空白）
+    imgCover(cw, ch, iw, ih) {
+        const xRate = cw / iw;
+        const yRate = ch / ih;
+        const setRate = xRate > yRate ? xRate : yRate;
         const imgWidth = iw * setRate;
         const imgHeight = ih * setRate;
         const imgX = (cw - imgWidth) / 2;

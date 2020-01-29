@@ -47,7 +47,6 @@ export default {
     }
   },
   mounted () {
-    this.loading = true;
     setTimeout(() => {
       const self = this;
       const img = new Image();
@@ -73,12 +72,14 @@ export default {
             canvas.height = simg.height;
             const context = canvas.getContext('2d');
             context.drawImage(simg, 0, 0, simg.width, simg.height,
-                0, 0, canvas.width, canvas.height);
+              0, 0, canvas.width, canvas.height);
             const [x0, y0] = [157, 272];  // 插图区域左上角点
             const [x1, y1] = [610, 679];  // 插图区域右下角点
-            const rect = util.imgContain(x1 - x0, y1 - y0, img.width, img.height);
-            context.drawImage(img, 0, 0, img.width, img.height,
-                rect.imgX + x0, rect.imgY + y0, rect.imgWidth, rect.imgHeight);
+            const rect = util.imgCover(x1 - x0, y1 - y0, img.width, img.height);
+            const [xBlank, yBlank] = [-rect.imgX / rect.rate, -rect.imgY / rect.rate];
+            context.drawImage(img, xBlank, yBlank,
+              img.width - xBlank * 2, img.height - yBlank * 2,
+              x0, y0, rect.imgWidth + rect.imgX * 2, rect.imgHeight + rect.imgY * 2);
             self.imgUrl = canvas.toDataURL("image/png");
           }
         });

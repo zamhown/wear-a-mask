@@ -55,10 +55,11 @@ export default {
   created () {
     if (!this.$store.state.editor) {
       this.$emit('navTo', 'index');
+    } else {
+      this.$store.commit('setFinishImg', null);
     }
   },
   mounted () {
-    this.loading = true;
     const cw = this.$refs.ic.clientWidth;
     const ch = this.$refs.ic.clientHeight - this.$refs.title.clientHeight;
     const bg = this.$store.state.editor.layers[0];
