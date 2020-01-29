@@ -110,11 +110,11 @@ export default {
 .img-container {
   height: 100%;
   position: relative;
-  background: #ff9c92;
 }
 img {
   display: block;
   position: absolute;
+  box-shadow: 0px 0px 7px #ccc;
 }
 .control {
   width: 100%;
@@ -126,7 +126,8 @@ button {
   width: 120px;
   height: 40px;
   margin: 10px;
-  background: white;
+  background: #ff8571;
+  color: white;
   border-radius: 20px;
   appearance: none;
   border: none;
@@ -134,7 +135,7 @@ button {
   box-shadow: 0px 0px 5px #888;
 }
 button:hover {
-  background: #f5dcd9;
+  background: #ff664d;
 }
 #shareBtn {
   position: absolute;
