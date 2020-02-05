@@ -2,7 +2,13 @@
   <div ref="index">
     <p><img class="example" src="../assets/example.png"></p>
     <p class="title" :style="{letterSpacing: $t('index.title.letterSpacing')}">{{ $t('index.title.text') }}</p>
-    <p class="slogan" :style="{letterSpacing: $t('index.slogan.letterSpacing')}"><span v-if="!wide" v-html="space"></span>{{ $t('index.slogan.text1') }}<br v-if="!wide"><span v-if="!wide" v-html="space"></span>{{ $t('index.slogan.text2') }}</p>
+    <p class="slogan" :style="{letterSpacing: $t('index.slogan.letterSpacing')}">
+      <span v-if="!wide" v-html="$t('index.slogan.space')"></span>
+      <span>{{ $t('index.slogan.text1') }}</span>
+      <br v-if="!wide">
+      <span v-if="!wide" v-html="$t('index.slogan.space')"></span>
+      <span>{{ $t('index.slogan.text2') }}</span>
+    </p>
     <div class="upload" :style="{width: $t('index.selectImg.width')}">
       <span>{{ $t('index.selectImg.text') }}</span>
       <input type="file" class="upload" @change="addImg" ref="inputer" accept="image/*" />
@@ -18,7 +24,6 @@
 export default {
   data() {
     return {
-      space: this.$t('index.slogan.space'),
       wide: false
     }
   },
@@ -64,6 +69,9 @@ export default {
   font-size: 18px;
   line-height: 28px;
   color: #ff8571;
+}
+.title, .slogan {
+  margin: 0px 5px;
 }
 .description {
   margin: 0px 15px 15px 15px;

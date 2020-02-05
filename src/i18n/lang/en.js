@@ -15,7 +15,7 @@ export default {
     },
     index: {
         title: {
-            text: 'Mask at critical moments!',
+            text: 'MASK AT CRITICAL MOMENTS!',
             letterSpacing: '1px'
         },
         slogan: {
