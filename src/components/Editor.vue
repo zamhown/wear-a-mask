@@ -3,7 +3,7 @@
     <div id="editorUI" :class="{'loading': loading}">
       <div ref="canvasContainer">
       </div>
-      <button id="resetBtn" @click="resetMask" :style="{width: $t('editor.reset.width')}">{{ $t('editor.reset.text') }}</button>
+      <little-button id="resetBtn" @click="resetMask" :width="$t('editor.reset.width')" icon="reset" :text="$t('editor.reset.text')" />
       <div id="maskStore" ref="maskStore">
         <p class="title">{{ $t('editor.changeMask') }}</p>
         <div class="list">
@@ -35,6 +35,7 @@
 
 <script>
 /* eslint-disable no-console */
+import LittleButton from './LittleButton'
 import faceApiUtil from '../utils/faceApiUtil';
 import StickerCanvas from '../utils/stickerCanvas';
 import maskData from '../utils/maskData';
@@ -43,6 +44,9 @@ import util from '../utils/util';
 import EXIF from 'exif-js';
 
 export default {
+  components: {
+    LittleButton
+  },
   props: {
     fileId: Number
   },
@@ -238,23 +242,14 @@ export default {
   font-size: 16px;
   box-shadow: 0px 0px 5px #888;
 }
-button:hover {
+.control button:hover {
   background: #f5dcd9;
 }
 #resetBtn {
   position: absolute;
   top: 0px;
   right: 0px;
-  width: 60px;
-  height: 25px;
   margin: 10px;
-  background: white;
-  border-radius: 13px;
-  appearance: none;
-  border: none;
-  font-size: 14px;
-  box-shadow: 0px 0px 5px #ccc;
-  opacity: 0.6;
 }
 #editorUI.loading {
   filter: blur(20px);

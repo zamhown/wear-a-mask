@@ -5,6 +5,14 @@ export default {
         filename: 'logo-title-en.svg',
         height: '20'  // vh
     },
+    languageBtn: {
+        text: 'Language',
+        width: 'auto'
+    },
+    languageList: {
+        title: 'Select Language',
+        width: '240px'
+    },
     index: {
         title: {
             text: 'Mask at critical moments!',
@@ -36,7 +44,7 @@ export default {
         },
         reset: {
             text: 'Reset',
-            width: '70px'
+            width: 'auto'
         },
         changeMask: 'Change the Mask',
         reselectImg: {
@@ -65,7 +73,7 @@ export default {
         },
         share: {
             text: 'Share',
-            width: '70px'
+            width: 'auto'
         }
     },
     share: {

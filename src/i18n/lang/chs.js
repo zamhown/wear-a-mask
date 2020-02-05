@@ -5,6 +5,14 @@ export default {
         filename: 'logo-title-chs.svg',
         height: '25'  // vh
     },
+    languageBtn: {
+        text: '选择语言',
+        width: 'auto'
+    },
+    languageList: {
+        title: '选择语言',
+        width: '200px'
+    },
     index: {
         title: {
             text: '疫情当前，有罩才稳',
@@ -36,7 +44,7 @@ export default {
         },
         reset: {
             text: '重置',
-            width: '60px'
+            width: 'auto'
         },
         changeMask: '更换口罩',
         reselectImg: {
@@ -65,7 +73,7 @@ export default {
         },
         share: {
             text: '分享',
-            width: '60px'
+            width: 'auto'
         }
     },
     share: {

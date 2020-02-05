@@ -2,7 +2,7 @@
   <div id="export">
     <div id="exportUI" :class="{'loading': loading}">
       <p class="img-container" ref="ic"><img :src="imgUrl" :style="imgStyle" @load="onImgLoaded"></p>
-      <button id="shareBtn" @click="share" :style="{width: $t('export.share.width')}">{{ $t('export.share.text') }}</button>
+      <little-button id="shareBtn" @click="share" :width="$t('export.share.width')" icon="share" :text="$t('export.share.text')" />
       <div class="title" ref="title">
         <p>{{ $t('export.title') }}</p>
         <div class="control">
@@ -23,10 +23,14 @@
 
 <script>
 /* eslint-disable no-console */
+import LittleButton from './LittleButton'
 import { mapState } from 'vuex';
 import util from '../utils/util';
 
 export default {
+  components: {
+    LittleButton
+  },
   data() {
     return {
       imgStyle: {},
@@ -114,7 +118,7 @@ img {
   height: 60px;
   background: #ff9c92;
 }
-button {
+.control button {
   height: 40px;
   margin: 10px;
   background: white;
@@ -124,22 +128,14 @@ button {
   font-size: 16px;
   box-shadow: 0px 0px 5px #888;
 }
-button:hover {
+.control button:hover {
   background: #f5dcd9;
 }
 #shareBtn {
   position: absolute;
   bottom: 0px;
   right: 0px;
-  height: 25px;
   margin: 10px;
-  background: white;
-  border-radius: 13px;
-  appearance: none;
-  border: none;
-  font-size: 14px;
-  box-shadow: 0px 0px 5px #ccc;
-  opacity: 0.6;
 }
 #exportUI.loading {
   filter: blur(20px);

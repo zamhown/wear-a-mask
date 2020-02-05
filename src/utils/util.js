@@ -41,5 +41,18 @@ export default {
         const imgX = (cw - imgWidth) / 2;
         const imgY = (ch - imgHeight) / 2;
         return {imgWidth, imgHeight, imgX, imgY, rate: setRate};
+    },
+    // 储存语言信息
+    setLang(lang) {
+        window.localStorage.setItem('user_lang', lang);
+    },
+    // 读取语言信息
+    getLang(defaultLang) {
+        let localLang = window.localStorage.getItem('user_lang')
+        if (localLang === null) {
+            return defaultLang;
+        } else {
+            return localLang;
+        }
     }
 }

@@ -66,8 +66,10 @@ export default {
   color: #ff8571;
 }
 .description {
-  color: #888;
   margin: 0px 15px 15px 15px;
+}
+.description {
+  color: #888;
   text-align: justify;
 }
 .upload {

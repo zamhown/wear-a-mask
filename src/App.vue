@@ -1,27 +1,44 @@
 <template>
   <div id="app">
-    <div id="header" :style="{height: $t('logo.height') + 'vh'}">
-      <img id="logo" :src="logoPath">
-      <a id="forkMe" href="https://github.com/zamhown/wear-a-mask">Fork me on GitHub!</a>
+    <div id="indexUI" :class="{'show-language-list': showLanguageList}">
+      <div id="header" :style="{height: $t('logo.height') + 'vh'}">
+        <img id="logo" :src="logoBaseUrl + $t('logo.filename')">
+        <little-button id="language" @click="language" :width="$t('languageBtn.width')" icon="language" :text="$t('languageBtn.text')" />
+        <a id="forkMe" href="https://github.com/zamhown/wear-a-mask">Fork me on GitHub!</a>
+      </div>
+      <div id="contentContainer" :style="{height: 100 - $t('logo.height') + 'vh'}">
+        <div id="content">
+          <Index v-show="nav=='index'" @navTo="navTo" />
+          <Editor v-show="nav=='editor'" :fileId="currentFileId" @navTo="navTo" />
+          <Export v-if="nav=='export'" @navTo="navTo" />
+          <Share v-if="nav=='share'" @navTo="navTo" />
+        </div>
+      </div>
     </div>
-    <div id="contentContainer" :style="{height: 100 - $t('logo.height') + 'vh'}">
-      <div id="content">
-        <Index v-show="nav=='index'" @navTo="navTo" />
-        <Editor v-show="nav=='editor'" :fileId="currentFileId" @navTo="navTo" />
-        <Export v-if="nav=='export'" @navTo="navTo" />
-        <Share v-if="nav=='share'" @navTo="navTo" />
+    <div v-if="showLanguageList" id="languageLayer">
+      <div :style="{width: $t('languageList.width')}">
+        <p>
+          <b>{{$t('languageList.title')}}</b>
+        </p>
+        <ul>
+          <li v-for="(v, k) in $i18n.messages" :key="k" :class="{selected: $i18n.locale == k}" @click="selectLanguage(k)">{{v.language}}</li>
+        </ul>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+/* eslint-disable no-console */
+
 import Index from './components/Index.vue'
 import Editor from './components/Editor.vue'
 import Export from './components/Export.vue'
 import Share from './components/Share.vue'
+import LittleButton from './components/LittleButton'
 
 import urls from './utils/urls'
+import util from './utils/util'
 
 export default {
   name: 'app',
@@ -29,13 +46,15 @@ export default {
     Index,
     Editor,
     Export,
-    Share
+    Share,
+    LittleButton
   },
   data() {
     return {
-      logoPath: urls.assetsBaseUrl + this.$t('logo.filename'),
+      logoBaseUrl: urls.assetsBaseUrl,
       nav: 'index',
-      currentFileId: 0
+      currentFileId: 0,
+      showLanguageList: false
     }
   },
   methods: {
@@ -44,6 +63,14 @@ export default {
       if (data) {
         this.currentFileId = data;
       }
+    },
+    language() {
+      this.showLanguageList = true;
+    },
+    selectLanguage(lang) {
+      this.showLanguageList = false;
+      this.$i18n.locale = lang;
+      util.setLang(lang);
     }
   },
   created () {
@@ -94,6 +121,11 @@ html, body, p, ul, li {
   border-radius: 0px 0px 20px 20px;
   box-shadow: 0px 0px 10px #ccc;
 }
+#language {
+  position: absolute;
+  top: 5px;
+  left: 20px;
+}
 #contentContainer {
   position: relative;
   margin: 0px auto;
@@ -106,5 +138,42 @@ html, body, p, ul, li {
   box-shadow: 0px 0px 5px #ccc;
   overflow-y: auto;
   overflow-x: hidden;
+}
+#indexUI.show-language-list {
+  filter: blur(20px);
+}
+#languageLayer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+}
+#languageLayer > div {
+  position: relative;
+  padding: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0 auto;
+  background: white;
+  border-radius: 5px;
+  font-size: 16px;
+  line-height: 25px;
+  box-shadow: 0px 0px 10px #ccc;
+}
+#languageLayer p {
+  height: 40px;
+  line-height: 40px;
+}
+#languageLayer li {
+  list-style: none;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 5px;
+}
+#languageLayer li.selected {
+  background: #f5dcd9 !important;
+}
+#languageLayer li:hover {
+  background: #eee;
 }
 </style>
