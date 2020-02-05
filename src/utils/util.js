@@ -4,7 +4,7 @@ export default {
     // 分享图像缓存
     shareImageSrc: null,
     // ajax获取分享图片（防止canvas导出时报跨域的错）
-    getShareImageSrc(callback) {
+    getShareImageSrc(filename, callback) {
         if (this.shareImageSrc) {
             callback(this.shareImageSrc);
         } else {
@@ -15,7 +15,7 @@ export default {
                 self.shareImageSrc = url;
                 callback(url);
             };
-            xhr.open('GET', urls.shareImgUrl, true);
+            xhr.open('GET', urls.assetsBaseUrl + filename, true);
             xhr.responseType = 'blob';
             xhr.send();
         }

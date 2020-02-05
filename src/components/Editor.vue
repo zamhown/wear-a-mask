@@ -3,9 +3,9 @@
     <div id="editorUI" :class="{'loading': loading}">
       <div ref="canvasContainer">
       </div>
-      <button id="resumeBtn" @click="resumeMask">重置</button>
+      <button id="resetBtn" @click="resetMask" :style="{width: $t('editor.reset.width')}">{{ $t('editor.reset.text') }}</button>
       <div id="maskStore" ref="maskStore">
-        <p class="title">更换口罩</p>
+        <p class="title">{{ $t('editor.changeMask') }}</p>
         <div class="list">
           <ul>
             <li v-for="m in maskData.masks" :key="m.name" @click="changeMask(m)">
@@ -15,18 +15,18 @@
         </div>
       </div>
       <div class="control" ref="control">
-        <button id="reuploadBtn" @click="reupload">重选图片</button>
-        <button id="saveBtn" @click="save">保存图片</button>
+        <button id="reuploadBtn" @click="reupload" :style="{width: $t('editor.reselectImg.width')}">{{ $t('editor.reselectImg.text') }}</button>
+        <button id="saveBtn" @click="save" :style="{width: $t('editor.saveImg.width')}">{{ $t('editor.saveImg.text') }}</button>
       </div>
     </div>
     <div v-if="loading" id="loading">
-      <div>
+      <div :style="{width: $t('editor.loading.width'), height: $t('editor.loading.height')}">
         <p>
-          <b>正在进行人脸检测，请稍等……</b>
+          <b>{{ $t('editor.loading.title') }}</b>
           <br>
-          由于算法全程在浏览器运行，
+          {{ $t('editor.loading.text1') }}
           <br>
-          运算速度可能取决于设备性能。
+          {{ $t('editor.loading.text2') }}
         </p>
       </div>
     </div>
@@ -145,9 +145,9 @@ export default {
         }
       });
     },
-    resumeMask () {
+    resetMask () {
       if (this.maskInfo && this.editor) {
-        maskHelper.resumeMask(this.maskInfo, this.editor, this.realImgInfo);
+        maskHelper.resetMask(this.maskInfo, this.editor, this.realImgInfo);
       }
     },
     changeMask (m) {
@@ -229,7 +229,6 @@ export default {
   background: #ff664d;
 }
 .control button {
-  width: 120px;
   height: 40px;
   margin: 10px;
   background: white;
@@ -242,7 +241,7 @@ export default {
 button:hover {
   background: #f5dcd9;
 }
-#resumeBtn {
+#resetBtn {
   position: absolute;
   top: 0px;
   right: 0px;
@@ -267,13 +266,11 @@ button:hover {
   top: 0px;
 }
 #loading > div {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 280px;
-  height: 94px;
+  position: relative;
   padding: 10px;
-  margin: -47px 0px 0px -140px;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0 auto;
   background: white;
   border-radius: 5px;
   font-size: 16px;

@@ -137,7 +137,7 @@ export default {
         return { mask };
     },
     // 重新戴口罩
-    resumeMask(maskInfo, canvasModel, realImgInfo) {
+    resetMask(maskInfo, canvasModel, realImgInfo) {
         if (maskInfo.imgOriginalWidth) {
             this.wearAMaskNormally(maskInfo, canvasModel, realImgInfo);
         } else {

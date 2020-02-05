@@ -1,14 +1,14 @@
 <template>
   <div ref="index">
     <p><img class="example" src="../assets/example.png"></p>
-    <p class="title">疫情当前，有罩才稳</p>
-    <p class="slogan"><span v-if="!wide" v-html="space"></span>给社交网络头像戴上口罩，<br v-if="!wide"><span v-if="!wide" v-html="space"></span>提醒更多人关注身体健康。</p>
-    <div class="upload">
-      <span>选择图片</span>
+    <p class="title" :style="{letterSpacing: $t('index.title.letterSpacing')}">{{ $t('index.title.text') }}</p>
+    <p class="slogan" :style="{letterSpacing: $t('index.slogan.letterSpacing')}"><span v-if="!wide" v-html="space"></span>{{ $t('index.slogan.text1') }}<br v-if="!wide"><span v-if="!wide" v-html="space"></span>{{ $t('index.slogan.text2') }}</p>
+    <div class="upload" :style="{width: $t('index.selectImg.width')}">
+      <span>{{ $t('index.selectImg.text') }}</span>
       <input type="file" class="upload" @change="addImg" ref="inputer" accept="image/*" />
     </div>
-    <p class="description">此页面可以在你的头像上自动P上口罩，你还可以对口罩的位置和大小进行编辑。</p>
-    <p class="description">人脸检测算法基于SSD MobileNet V1神经网络模型，无需上传图片，也不会保留任何数据。</p>
+    <p class="description" :style="{letterSpacing: $t('index.description.letterSpacing')}">{{ $t('index.description.text1') }}</p>
+    <p class="description" :style="{letterSpacing: $t('index.description.letterSpacing')}">{{ $t('index.description.text2') }}</p>
   </div>
 </template>
 
@@ -18,7 +18,7 @@
 export default {
   data() {
     return {
-      space: '　',
+      space: this.$t('index.slogan.space'),
       wide: false
     }
   },
@@ -59,23 +59,19 @@ export default {
   font-weight: bolder;
   line-height: 35px;
   color: #ff664d;
-  letter-spacing: 4px;
 }
 .slogan {
   font-size: 18px;
   line-height: 28px;
   color: #ff8571;
-  letter-spacing: 2px;
 }
 .description {
   color: #888;
   margin: 0px 15px 15px 15px;
   text-align: justify;
-  letter-spacing: 1px;
 }
 .upload {
   position: relative;
-  width: 160px;
   height: 60px;
   margin: 20px auto;
   background: #ff8571;

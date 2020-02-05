@@ -3,16 +3,16 @@
     <div id="shareUI" :class="{'loading': loading}">
       <p class="img-container" ref="ic"><img :src="imgUrl" :style="imgStyle" @load="onImgLoaded"></p>
       <div class="title" ref="title">
-        <p>保存下方图片，分享给朋友吧！</p>
+        <p>{{ $t('share.title') }}</p>
       </div>
       <div class="control" ref="control">
-        <button @click="back">返回</button>
+        <button @click="back" :style="{width: $t('share.back.width')}">{{ $t('share.back.text') }}</button>
       </div>
     </div>
     <div v-if="loading" id="loading">
-      <div>
+      <div :style="{width: $t('share.loading.width'), height: $t('share.loading.height')}">
         <p>
-          <b>正在生成中……</b>
+          <b>{{ $t('share.loading.title') }}</b>
         </p>
       </div>
     </div>
@@ -52,7 +52,7 @@ export default {
       const img = new Image();
       img.src = this.$store.state.finishImg;
       img.onload = function () {
-        util.getShareImageSrc(sUrl => {
+        util.getShareImageSrc(self.$t('share.shareImg.filename'), sUrl => {
           const simg = new Image();
           simg.src = sUrl;
           simg.onload = function () {
@@ -73,8 +73,8 @@ export default {
             const context = canvas.getContext('2d');
             context.drawImage(simg, 0, 0, simg.width, simg.height,
               0, 0, canvas.width, canvas.height);
-            const [x0, y0] = [157, 272];  // 插图区域左上角点
-            const [x1, y1] = [610, 679];  // 插图区域右下角点
+            const [x0, y0] = JSON.parse(self.$t('share.shareImg.p0'));  // 插图区域左上角点
+            const [x1, y1] = JSON.parse(self.$t('share.shareImg.p1'));  // 插图区域右下角点
             const rect = util.imgCover(x1 - x0, y1 - y0, img.width, img.height);
             const [xBlank, yBlank] = [-rect.imgX / rect.rate, -rect.imgY / rect.rate];
             context.drawImage(img, xBlank, yBlank,
@@ -123,7 +123,6 @@ img {
   bottom: 0;
 }
 button {
-  width: 120px;
   height: 40px;
   margin: 10px;
   background: #ff8571;
@@ -162,13 +161,11 @@ button:hover {
   top: 0px;
 }
 #loading > div {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 200px;
-  height: 50px;
+  position: relative;
   padding: 10px;
-  margin: -25px 0px 0px -100px;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0 auto;
   background: white;
   border-radius: 5px;
   font-size: 16px;

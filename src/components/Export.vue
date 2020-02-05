@@ -2,19 +2,19 @@
   <div id="export">
     <div id="exportUI" :class="{'loading': loading}">
       <p class="img-container" ref="ic"><img :src="imgUrl" :style="imgStyle" @load="onImgLoaded"></p>
-      <button id="shareBtn" @click="share">分享</button>
+      <button id="shareBtn" @click="share" :style="{width: $t('export.share.width')}">{{ $t('export.share.text') }}</button>
       <div class="title" ref="title">
-        <p>长按或右键保存下方图片</p>
+        <p>{{ $t('export.title') }}</p>
         <div class="control">
-          <button @click="backToEditor">继续编辑</button>
-          <button @click="backToIndex">重选图片</button>
+          <button @click="backToEditor" :style="{width: $t('export.backToEditor.width')}">{{ $t('export.backToEditor.text') }}</button>
+          <button @click="backToIndex" :style="{width: $t('export.backToIndex.width')}">{{ $t('export.backToIndex.text') }}</button>
         </div>
       </div>
     </div>
     <div v-if="loading" id="loading">
-      <div>
+      <div :style="{width: $t('export.loading.width'), height: $t('export.loading.height')}">
         <p>
-          <b>正在导出中……</b>
+          <b>{{ $t('export.loading.title') }}</b>
         </p>
       </div>
     </div>
@@ -115,7 +115,6 @@ img {
   background: #ff9c92;
 }
 button {
-  width: 120px;
   height: 40px;
   margin: 10px;
   background: white;
@@ -132,7 +131,6 @@ button:hover {
   position: absolute;
   bottom: 0px;
   right: 0px;
-  width: 60px;
   height: 25px;
   margin: 10px;
   background: white;
@@ -153,13 +151,11 @@ button:hover {
   top: 0px;
 }
 #loading > div {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 200px;
-  height: 50px;
+  position: relative;
   padding: 10px;
-  margin: -25px 0px 0px -100px;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0 auto;
   background: white;
   border-radius: 5px;
   font-size: 16px;

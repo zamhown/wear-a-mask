@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <div id="header">
-      <img id="logo" src="./assets/logo-title.svg">
+    <div id="header" :style="{height: $t('logo.height') + 'vh'}">
+      <img id="logo" :src="logoPath">
       <a id="forkMe" href="https://github.com/zamhown/wear-a-mask">Fork me on GitHub!</a>
     </div>
-    <div id="contentContainer">
+    <div id="contentContainer" :style="{height: 100 - $t('logo.height') + 'vh'}">
       <div id="content">
         <Index v-show="nav=='index'" @navTo="navTo" />
         <Editor v-show="nav=='editor'" :fileId="currentFileId" @navTo="navTo" />
@@ -21,6 +21,8 @@ import Editor from './components/Editor.vue'
 import Export from './components/Export.vue'
 import Share from './components/Share.vue'
 
+import urls from './utils/urls'
+
 export default {
   name: 'app',
   components: {
@@ -31,6 +33,7 @@ export default {
   },
   data() {
     return {
+      logoPath: urls.assetsBaseUrl + this.$t('logo.filename'),
       nav: 'index',
       currentFileId: 0
     }
@@ -42,6 +45,9 @@ export default {
         this.currentFileId = data;
       }
     }
+  },
+  created () {
+    document.title = this.$t('title');
   }
 }
 </script>
@@ -68,7 +74,6 @@ html, body, p, ul, li {
 }
 #header {
   position: relative;
-  height: 25vh;
   margin: 0px auto;
 }
 #logo {
@@ -91,7 +96,6 @@ html, body, p, ul, li {
 }
 #contentContainer {
   position: relative;
-  height: 75vh;
   margin: 0px auto;
   padding: 0px 15px 15px 15px;
 }
