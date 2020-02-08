@@ -1,17 +1,19 @@
-<p align="center"><img width="400" src="https://raw.githubusercontent.com/zamhown/wear-a-mask/master/assets/logo-title-en.svg" alt="logo"></p>
+<p align="center"><img width="400" src="https://raw.githubusercontent.com/zamhown/wear-a-mask/master/assets/logo-title-en.png" alt="logo"></p>
 
 # Wear a Mask on Your Avatar
 A single-page application that uses only the front-end to perform deep-learning-based facial landmark detection on images and automatically adds breathing mask stickers.   
 **Wear a mask on your SNS avatars, just make more people aware of epidemic diseases and public health!**  
+  
 Application link: [https://zamhown.github.io/wear-a-mask](https://zamhown.github.io/wear-a-mask)  
 Application link (Chinese version): [https://zamhown.gitee.io/wear-a-mask](https://zamhown.gitee.io/wear-a-mask)  
+  
 [中文版ReadMe](https://github.com/zamhown/wear-a-mask/blob/master/readme/README-chs.md)  
 
 ## Usage
 After the user uploads his or her avatar, the page will automatically detect the face in the picture, and identify the key points to match the most suitable mask sticker.  Then the user can change the position, size, rotation angle and flip of the sticker in an editor implemented by canvas, and then export the modified avatar.  The entire process is performed on the front end, and the pictures do not need to be uploaded to the server.  
   
-Usage case screenshot (Chinese version)：  
-![example](https://raw.githubusercontent.com/zamhown/wear-a-mask/master/assets/example.jpg)  
+Usage case screenshot：  
+![example](https://raw.githubusercontent.com/zamhown/wear-a-mask/master/assets/example-en.jpg)  
 
 ## Face Detection and Facial Landmark Detection
 The project uses [face-api.js](https://github.com/justadudewhohacks/face-api.js), which is based on [TensorFlow.js](https://github.com/tensorflow/tfjs).  

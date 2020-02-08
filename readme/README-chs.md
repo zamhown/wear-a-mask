@@ -1,8 +1,9 @@
-<p align="center"><img width="400" src="https://raw.githubusercontent.com/zamhown/wear-a-mask/master/assets/logo-title-chs.svg" alt="logo"></p>
+<p align="center"><img width="400" src="https://raw.githubusercontent.com/zamhown/wear-a-mask/master/assets/logo-title.png" alt="logo"></p>
 
 # 给你的头像戴上口罩(Wear a Mask)
 一个纯前端实现的对图像进行基于深度学习的人脸关键点检测并自动添加口罩贴纸的单页面应用。  
-**给你的头像戴上口罩，铭记肺炎疫情，让更多人重视公共卫生！**   
+**给你的头像戴上口罩，铭记肺炎疫情，提醒更多人重视公共卫生！**   
+  
 应用链接：[https://zamhown.github.io/wear-a-mask](https://zamhown.github.io/wear-a-mask)  
 国内版链接（推荐）：[https://zamhown.gitee.io/wear-a-mask](https://zamhown.gitee.io/wear-a-mask)
 
