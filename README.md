@@ -1,35 +1,39 @@
-![LOGO](https://raw.githubusercontent.com/zamhown/wear-a-mask/master/assets/logo-title.png)
-# 给你的头像戴上口罩(Wear A Mask)
-一个纯前端实现的对图像进行基于深度学习的人脸关键点检测并自动添加口罩贴纸的单页面应用。  
-应用链接：[https://zamhown.github.io/wear-a-mask](https://zamhown.github.io/wear-a-mask)  
-国内版链接（推荐）：[https://zamhown.gitee.io/wear-a-mask](https://zamhown.gitee.io/wear-a-mask)
+<p align="center"><img width="400" src="https://raw.githubusercontent.com/zamhown/wear-a-mask/master/assets/logo-title-en.svg" alt="logo"></p>
 
-## 使用
-用户上传自己的头像后，页面会自动检测图片中的人脸，识别出关键点后匹配最适合的口罩贴纸。然后用户可以在一个canvas实现的编辑器内改变贴纸的位置、大小、旋转角度和翻转，然后将修改后的头像导出。整个过程都在前端完成，图片无需上传到服务器。  
+# Wear a Mask on Your Avatar
+A single-page application that uses only the front-end to perform deep-learning-based facial landmark detection on images and automatically adds breathing mask stickers.   
+**Wear a mask on your SNS avatars, just make more people aware of epidemic diseases and public health!**  
+Application link: [https://zamhown.github.io/wear-a-mask](https://zamhown.github.io/wear-a-mask)  
+Application link (Chinese version): [https://zamhown.gitee.io/wear-a-mask](https://zamhown.gitee.io/wear-a-mask)  
+[中文版ReadMe](https://github.com/zamhown/wear-a-mask/blob/master/readme/README-chs.md)  
+
+## Usage
+After the user uploads his or her avatar, the page will automatically detect the face in the picture, and identify the key points to match the most suitable mask sticker.  Then the user can change the position, size, rotation angle and flip of the sticker in an editor implemented by canvas, and then export the modified avatar.  The entire process is performed on the front end, and the pictures do not need to be uploaded to the server.  
   
-使用案例截图：  
+Usage case screenshot (Chinese version)：  
 ![example](https://raw.githubusercontent.com/zamhown/wear-a-mask/master/assets/example.jpg)  
 
-## 人脸检测和人脸关键点检测
-本项目使用了基于[TensorFlow.js](https://github.com/tensorflow/tfjs)的[face-api.js](https://github.com/justadudewhohacks/face-api.js)库。  
-人脸检测任务使用了SSD MobileNet V1模型（用[WIDERFACE数据集](http://mmlab.ie.cuhk.edu.hk/projects/WIDERFace)进行训练），人脸关键点检测任务使用了face-api.js作者构建的基于CNN的68点检测模型（在约有35,000张面部图像的数据集上进行训练），模型权重数据来源于face-api.js。  
+## Face Detection and Facial Landmark Detection
+The project uses [face-api.js](https://github.com/justadudewhohacks/face-api.js), which is based on [TensorFlow.js](https://github.com/tensorflow/tfjs).  
+The face detection task uses the SSD MobileNet V1 model (trained with the [WIDERFACE dataset](http://mmlab.ie.cuhk.edu.hk/projects/WIDERFace)), and the facial landmark detection task uses a 68-point CNN-based detection model built by the author of face-api.js (the training dataset contains about 35,000 facial images). The models' weight data comes from face-api.js.  
 
-## 口罩贴纸的自动选择与定位
-项目中包含了若干口罩贴纸素材和每个口罩的数据。在每个口罩贴纸上取三个关键点（左上角、右上角和下巴底部），检测出用户头像上的关键点以后，根据这些数据计算出与脸型最匹配的口罩贴纸，并反向计算出相应的几何变换，将贴纸放在头像上的合适位置。  
+## Automatic Selection and Positioning of Mask Stickers
+The project contains several mask sticker images and data for each mask. Take three key points on each mask sticker (upper left corner, upper right corner, and bottom of chin). After detecting the landmarks on the user's avatar, automatically select the mask sticker that best matches the face shape based on these data, and calculate the corresponding geometric transformation, then put the sticker image in the appropriate position on the avatar.  
+![mask example](https://raw.githubusercontent.com/zamhown/wear-a-mask/master/assets/mask-example.jpg)  
 
-## 拥有贴纸编辑功能的图像编辑器
-本项目的图像编辑器采用canvas实现，以npm包[xl_canvas](https://www.npmjs.com/package/xl_canvas)为基础。由于该包不能直接使用，于是进行深度修改，添加了翻转、触摸支持、按原始分辨率导出等一系列功能，集成在项目中。  
+## Image Editor With Sticker Editing Function
+The image editor for this project is implemented using canvas, based on the npm package [xl_canvas](https://www.npmjs.com/package/xl_canvas). Because the package can not be used directly, it was deeply modified, and a series of functions such as flip, touch support, and export at the original resolution were added and finally integrated into the project.
 
-## 项目配置
-### 环境配置
+## Commands
+### Project setup
 ```
 npm install
 ```
 
-### 项目调试
+### Compiles and hot-reloads for development
 ```
 npm run serve
 ```
 
-### 编译与构建
-运行`build.bat`。  
+### Compiles and minifies for production
+Run `build.bat`. 

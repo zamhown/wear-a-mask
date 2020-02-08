@@ -88,8 +88,8 @@ export default {
             width: '120px'
         },
         shareImg: {
-            filename: 'share-github-chs.png',
-            p0: '[157, 272]',  // left-top point of rect for user-image embeding
+            filename: 'share-github-en.png',
+            p0: '[157, 227]',  // left-top point of rect for user-image embeding
             p1: '[610, 679]'  // right-bottom point of rect for user-image embeding
         }
     }
