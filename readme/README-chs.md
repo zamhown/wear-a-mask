@@ -19,7 +19,7 @@
 
 ## 口罩贴纸的自动选择与定位
 项目中包含了若干口罩贴纸素材和每个口罩的数据。在每个口罩贴纸上取三个关键点（左上角、右上角和下巴底部），检测出用户头像上的关键点以后，根据这些数据计算出与脸型最匹配的口罩贴纸，并反向计算出相应的几何变换，将贴纸放在头像上的合适位置。  
-![mask example](https://raw.githubusercontent.com/zamhown/wear-a-mask/master/assets/mask-example.jpg)  
+![mask example](https://raw.githubusercontent.com/zamhown/wear-a-mask/master/assets/mask-example.png)  
 
 ## 拥有贴纸编辑功能的图像编辑器
 本项目的图像编辑器采用canvas实现，以npm包[xl_canvas](https://www.npmjs.com/package/xl_canvas)为基础。由于该包不能直接使用，于是进行深度修改，添加了翻转、触摸支持、按原始分辨率导出等一系列功能，集成在项目中。  
