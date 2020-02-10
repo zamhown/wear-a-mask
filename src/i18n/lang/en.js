@@ -65,11 +65,11 @@ export default {
         title: 'Long Press or Right Click to Save the Image',
         backToEditor: {
             text: 'Continue Editing',
-            width: '140px'
+            width: '150px'
         },
         backToIndex: {
             text: 'Reselect',
-            width: '100px'
+            width: '90px'
         },
         share: {
             text: 'Share',
