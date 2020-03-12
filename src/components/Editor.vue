@@ -78,12 +78,12 @@ export default {
       });
       const editor = this.editor;
       const self = this;
-      //获取图片Orientation参数
+      // Get the orientation data of the image
       EXIF.getData(file, function () {
         console.log(EXIF.getAllTags(this));
-        const EXIF_orientation = EXIF.getTag(this, 'Orientation');  // 解决移动设备照片方向问题
+        const EXIF_orientation = EXIF.getTag(this, 'Orientation');
         const reader = new FileReader();
-        reader.readAsDataURL(file);  // 发起异步请求
+        reader.readAsDataURL(file);  // Asynchronous
         reader.onload = function () {
           const img = new Image();
           img.src = this.result;
@@ -94,19 +94,19 @@ export default {
             let orientation = 0;
             if(EXIF_orientation && EXIF_orientation != 1){
               switch(EXIF_orientation){
-                // 旋转90度
+                // Rotate 90°
                 case 6:
                   angle = Math.PI / 2;
                   width = img.height;
                   height = img.width;
                   orientation = 90;
                   break;
-                // 旋转180度
+                // Rotate 180°
                 case 3:
                   angle = Math.PI;
                   orientation = 180;
                   break;
-                // 旋转270度
+                // Rotate 270°
                 case 8:
                   angle = 3 * Math.PI / 2;
                   width = img.height;
@@ -115,7 +115,7 @@ export default {
                   break;
               }
             }
-            // 等比例缩放图片
+            // Scale the image equally
             const {imgWidth, imgHeight, imgX, imgY, rate} = util.imgContain(editor.width, editor.height, width, height);
             editor.addPhoto(img, {
               width: img.width * rate,
@@ -133,7 +133,7 @@ export default {
 
             setTimeout(() => {    
               const rimg = new Image();
-              rimg.src = editor.export();  // 放进算法前导出一次确保图片方向正确
+              rimg.src = editor.export();  // Export before detecting to ensure the right image orientation
               rimg.onload = function () {
                 faceApiUtil.detectPic(rimg, editor, self.realImgInfo, maskInfo => {
                   self.maskInfo = maskInfo;
@@ -144,7 +144,7 @@ export default {
                   self.loading = false;
                 });
               }
-            }, 300);  // 留时间刷新界面
+            }, 300);  // Time for DOM updating
           }
         }
       });

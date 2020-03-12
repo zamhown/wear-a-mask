@@ -89,8 +89,8 @@ export default {
         },
         shareImg: {
             filename: 'share-github-en.png',
-            p0: '[157, 227]',  // left-top point of rect for user-image embeding
-            p1: '[610, 679]'  // right-bottom point of rect for user-image embeding
+            p0: '[157, 227]',  // Left-top point of the rect for user-image embeding
+            p1: '[610, 679]'  // Right-bottom point of the rect for user-image embeding
         }
     }
  }

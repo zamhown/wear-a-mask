@@ -82,7 +82,7 @@ export default {
     }
     setTimeout(() => {
       this.$store.commit('setFinishImg', this.$store.state.editor.export());
-    }, 300);  // 留时间刷新界面
+    }, 300);  // Time for DOM updating
   }
 }
 </script>

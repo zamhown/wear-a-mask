@@ -1,11 +1,11 @@
 export default {
-    // 求两点的中点
+    // Solve the midpoint of two points
     getMidPoint(p1, p2) {
         const [x1, y1] = p1;
         const [x2, y2] = p2;
         return [(x1 + x2) / 2, (y1 + y2) / 2];
     },
-    // 已知两点求直线解析式Ax+By+C=0
+    // Solve the linear analytical equation with two known points (Ax+By+C=0)
     makeLine(p1, p2) {
         const [x1, y1] = p1;
         const [x2, y2] = p2;
@@ -15,19 +15,19 @@ export default {
             (x1 - x2) * y2 + (y2 - y1) * x2
         ];
     },
-    // 两点距离
+    // Solve the distance of two points
     pointDistance(p1, p2) {
         const [x1, y1] = p1;
         const [x2, y2] = p2;
         return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
     },
-    // 已知一点和直线解析式Ax+By+C=0，求点到直线的距离
+    // Given a point and the analytical equation (Ax+By+C=0) for a straight line, solve the distance from the point to the line
     pointLineDistance(p, l) {
         const [x, y] = p;
         const [A, B, C] = l;
         return Math.abs(A * x + B * y + C) / Math.sqrt(A * A + B * B);
     },
-    // 已知直线解析式Ax+By+C=0和垂线上一点，求过该点的垂线的解析式
+    // Given a point and the analytical equation (Ax+By+C=0) for a straight line, solve the perpendicular line passing through the point
     makePerpendicularLine(l, p) {
         const [A, B] = l;
         const [x, y] = p;
@@ -37,7 +37,7 @@ export default {
             B * x - A * y
         ];
     },
-    // 求两直线的交点
+    // Solve the intersection of two lines
     getCrossPointOfTwoLines(l1, l2) {
         const [A1, B1, C1] = l1;
         const [A2, B2, C2] = l2;
@@ -45,11 +45,12 @@ export default {
         return [(B1 * C2 - B2 * C1) / denominator,
             (A2 * C1 - A1 * C2) / denominator];
     },
-    // 已知一点和直线解析式Ax+By+C=0，求点到直线的垂线与直线的交点
+    // Given a point and the analytical equation (Ax+By+C=0) for a straight line,
+    // solve the intersection point of the line and the perpendicular line passing through the point
     getPerpendicularPoint(l, p) {
         return this.getCrossPointOfTwoLines(l, this.makePerpendicularLine(l, p));
     },
-    // 根据旋转中心点和一点的初、末坐标，求旋转角度
+    // Calculate the rotation angle according to the rotation center point and the initial and final coordinates of a point
     getAngle(center, sp, ep) {
         const [cx, cy] = center;
         const [sx, sy] = sp;
@@ -63,19 +64,19 @@ export default {
         if (c === 0) return -1;
         const angle = Math.acos((f_c_x * s_c_x + f_c_y * s_c_y) / c);
         const [vecX, vecY] = [cx - ex, cy - ey];
-        // 第一象限
+        // First quadrant
         if (vecX < 0 && vecY < 0) {
             return angle;
         }
-        // 第二象限
+        // Second quadrant
         if (vecX < 0 && vecY > 0) {
             return angle;
         }
-        // 第三象限
+        // Third quadrant
         if (vecX > 0 && vecY < 0) {
             return 2 * Math.PI - angle;
         }
-        // 第四象限
+        // Fourth quadrant
         if (vecX > 0 && vecY > 0) {
             return 2 * Math.PI - angle;
         }

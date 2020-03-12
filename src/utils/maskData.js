@@ -2,8 +2,8 @@ import urls from './urls';
 
 export default {
     baseUrl: urls.maskBaseUrl,
-    // 数据要求：leftPoint和rightPoint必须同高
-    // side：0正面，1左侧面，2右侧面
+    // Data requirements: leftPoint and rightPoint must share the same y-coordinate
+    // Side：0:front, 1:left side, 2:right side
     masks: [
         {
             name: "n1.png",
@@ -102,7 +102,7 @@ export default {
             side: 1,
             leftPoint: [37, 86],
             rightPoint: [221, 86],
-            bottomPoint: [80, 243]  // 假点，为了避免戴在正脸上
+            bottomPoint: [80, 243]  // adjusted fake point
         },
         {
             name: "n12.png",

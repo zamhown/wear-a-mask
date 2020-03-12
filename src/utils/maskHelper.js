@@ -8,11 +8,12 @@ function cvt(p) {
 }
 
 export default {
-    // 口罩图像缓存
+    // Mask stickers cache
     maskImageSrc: {},
-    // 挑选合适的口罩
+    // Find a suitable mask
     findMask(lp, rp, bp, side) {
-        // 将口罩放缩，左右两点和脸部左右两点重合，计算底部点的距离
+        // Zoom the mask so that the left and right points coincide with the left and right points of the face,
+        // and calculate the distance between the bottom points
         let minDistance = Number.MAX_VALUE;
         let minData = null;
         maskData.masks.filter(m => (m.side == 0 && side == 0) || m.side * side > 0).forEach(m => {
@@ -23,7 +24,7 @@ export default {
             const rate = dm01 / dm12;
             const [x1, y1] = lp;
             const [x2, y2] = rp;
-            // 正常
+            // Normal case
             if ((m.side == 0 && side == 0) || m.side == side) {
                 let [x0, y0] = [x1 + (x2 - x1) * rate, y1 + (y2 - y1) * rate];
                 let pline = geometry.makePerpendicularLine(geometry.makeLine(lp, rp), [x0, y0]);
@@ -39,7 +40,7 @@ export default {
                     }, m);
                 }
             }
-            // 翻转
+            // Flipped case
             if ((m.side == 0 && side == 0) || m.side != side) {
                 let [x0, y0] = [x2 + (x1 - x2) * rate, y2 + (y1 - y2) * rate];
                 let pline = geometry.makePerpendicularLine(geometry.makeLine(lp, rp), [x0, y0]);
@@ -58,7 +59,8 @@ export default {
         });
         return minData;
     },
-    // 通过三点的起始坐标和终止坐标，计算平移、缩放和旋转（前提：sp1和sp2同高）
+    // Calculate the translation, scaling and rotation through the start and end coordinates of three points
+    // (premise: sp1 and sp2 share the same y-coordinate)
     computeTransform(sp1, sp2, sp3, ep1, ep2, ep3, stickerWidth, stickerHeight) {
         const de12 = geometry.pointDistance(ep1, ep2);
         const xScale = de12 / geometry.pointDistance(sp1, sp2);
@@ -73,15 +75,15 @@ export default {
                 ep2)
         }
     },
-    // 戴口罩
+    // Wear a mask
     wearAMaskAfterFaceDetection(result, canvasModel, realImgInfo) {
         const points = result.landmarks.positions;
-        let leftPoint = geometry.getMidPoint(cvt(points[1]), cvt(points[2]));  // 左边缘
-        let rightPoint = geometry.getMidPoint(cvt(points[15]), cvt(points[14]));  // 右边缘
-        const bottomPoint = cvt(points[8]);  // 下边缘
-        const nosePoint = cvt(points[28]);  // 鼻
+        let leftPoint = geometry.getMidPoint(cvt(points[1]), cvt(points[2]));  // Left edge of the face
+        let rightPoint = geometry.getMidPoint(cvt(points[15]), cvt(points[14]));  // Right edge of the face
+        const bottomPoint = cvt(points[8]);  // Bottom edge of the face
+        const nosePoint = cvt(points[28]);  // Nose point
         let side = 0;
-        // 判断鼻是否超过左右点
+        // Determine whether the nose point is beyond the range between left and right points
         if (nosePoint.x > rightPoint.x) {
             rightPoint = nosePoint;
             side = 2;
@@ -89,7 +91,7 @@ export default {
             leftPoint = nosePoint;
             side = 1;
         }
-        // 查找口罩
+        // Find a mask
         const maskInfo = {
             mask: this.findMask(leftPoint, rightPoint, bottomPoint, side),
             imgOriginalWidth: result.detection.imageWidth,
@@ -97,7 +99,7 @@ export default {
         }
         return this.wearAMaskNormally(maskInfo, canvasModel, realImgInfo);
     },
-    // 正常地戴口罩
+    // Wear a mask after detecting face successfully
     wearAMaskNormally(maskInfo, canvasModel, realImgInfo) {
         const mask = maskInfo.mask;
         const xRate = realImgInfo.width / maskInfo.imgOriginalWidth;
@@ -118,7 +120,7 @@ export default {
         });
         return maskInfo;
     },
-    // 笨拙地戴口罩
+    // Wear a mask after detecting face unsuccessfully
     wearAMaskAsAFool(canvasModel, realImgInfo) {
         const mask = maskData.masks[2];
         this.getMaskImageSrc(mask, url => {
@@ -136,7 +138,6 @@ export default {
         });
         return { mask };
     },
-    // 重新戴口罩
     resetMask(maskInfo, canvasModel, realImgInfo) {
         if (maskInfo.imgOriginalWidth) {
             this.wearAMaskNormally(maskInfo, canvasModel, realImgInfo);
@@ -144,7 +145,6 @@ export default {
             this.wearAMaskAsAFool(canvasModel, realImgInfo);
         }
     },
-    // 更换口罩
     changeMask(newMask, canvasModel) {
         const oldRect = canvasModel.layers[1].rect;
         canvasModel.removeItem(1);
@@ -159,7 +159,7 @@ export default {
             canvasModel.chooseItem(1);
         });
     },
-    // ajax获取口罩图片（防止canvas导出时报跨域的错）
+    // Get mask image with Ajax (to prevent cross domain error during canvas export)
     getMaskImageSrc(mask, callback) {
         if (this.maskImageSrc[mask.name]) {
             callback(this.maskImageSrc[mask.name]);

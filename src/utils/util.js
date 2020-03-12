@@ -1,9 +1,9 @@
 import urls from '../utils/urls';
 
 export default {
-    // 分享图像缓存
+    // Share template image cache
     shareImageSrc: null,
-    // ajax获取分享图片（防止canvas导出时报跨域的错）
+    // Get share template image with Ajax (to prevent cross domain error during canvas export)
     getShareImageSrc(filename, callback) {
         if (this.shareImageSrc) {
             callback(this.shareImageSrc);
@@ -20,7 +20,7 @@ export default {
             xhr.send();
         }
     },
-    // 排版图片，填充容器并居中（图片完整显示，留空白）
+    // Get the transition of contain mode (center the image and fill the container, the image is displayed in full)
     imgContain(cw, ch, iw, ih) {
         const xRate = cw / iw;
         const yRate = ch / ih;
@@ -31,7 +31,7 @@ export default {
         const imgY = (ch - imgHeight) / 2;
         return {imgWidth, imgHeight, imgX, imgY, rate: setRate};
     },
-    // 排版图片，填充容器并居中（图片不留空白）
+    // Get the transition of cover mode (center the image and fill the container, the image is completely filled, leaving no space)
     imgCover(cw, ch, iw, ih) {
         const xRate = cw / iw;
         const yRate = ch / ih;
@@ -42,11 +42,11 @@ export default {
         const imgY = (ch - imgHeight) / 2;
         return {imgWidth, imgHeight, imgX, imgY, rate: setRate};
     },
-    // 储存语言信息
+    // Store language information
     setLang(lang) {
         window.localStorage.setItem('user_lang', lang);
     },
-    // 读取语言信息
+    // Load language information
     getLang(defaultLang) {
         let localLang = window.localStorage.getItem('user_lang')
         if (localLang === null) {

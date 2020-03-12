@@ -89,8 +89,8 @@ export default {
         },
         shareImg: {
             filename: 'share-gitee-chs.png',
-            p0: '[157, 272]',  // left-top point of rect for user-image embeding
-            p1: '[610, 679]'  // right-bottom point of rect for user-image embeding
+            p0: '[157, 272]',  // Left-top point of the rect for user-image embeding
+            p1: '[610, 679]'  // Right-bottom point of the rect for user-image embeding
         }
     }
  }

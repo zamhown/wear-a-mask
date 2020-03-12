@@ -73,8 +73,8 @@ export default {
             const context = canvas.getContext('2d');
             context.drawImage(simg, 0, 0, simg.width, simg.height,
               0, 0, canvas.width, canvas.height);
-            const [x0, y0] = JSON.parse(self.$t('share.shareImg.p0'));  // 插图区域左上角点
-            const [x1, y1] = JSON.parse(self.$t('share.shareImg.p1'));  // 插图区域右下角点
+            const [x0, y0] = JSON.parse(self.$t('share.shareImg.p0'));  // Left-top point of the rect for user-image embeding
+            const [x1, y1] = JSON.parse(self.$t('share.shareImg.p1'));  // Right-bottom point of the rect for user-image embeding
             const rect = util.imgCover(x1 - x0, y1 - y0, img.width, img.height);
             const [xBlank, yBlank] = [-rect.imgX / rect.rate, -rect.imgY / rect.rate];
             context.drawImage(img, xBlank, yBlank,
@@ -84,7 +84,7 @@ export default {
           }
         });
       }
-    }, 300);  // 留时间刷新界面
+    }, 300);  // Time for DOM updating
   }
 }
 </script>

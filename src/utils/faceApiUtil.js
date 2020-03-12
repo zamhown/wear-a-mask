@@ -18,19 +18,14 @@ export default {
     const onLoadErr = () => { failed = true; };
     
     this.modelsLoading = true;
-    // 加载训练好的模型(weight，bias)
-    // faceLandmark68Net 识别脸部特征用于mobilenet算法
-    // faceLandmark68TinyNet 识别脸部特征用于tiny算法
-    // ssdMobilenetv1 google开源AI算法除库包含分类和线性回归
-    // tinyFaceDetector 比Google的mobilenet更轻量级，速度更快一点
-    // mtcnn  多任务CNN算法
+    // Load the pretrained models (weight, bias)
     Promise.all([
-      faceapi.nets.faceLandmark68Net.loadFromUri(modelUrl).catch(onLoadErr),
-      faceapi.nets.faceLandmark68Net.loadFromUri(modelUrl).catch(onLoadErr),
-      //faceapi.nets.faceLandmark68TinyNet.loadFromUri(modelUrl).catch(onLoadErr),
       faceapi.nets.ssdMobilenetv1.loadFromUri(modelUrl).catch(onLoadErr),
-      //faceapi.nets.tinyFaceDetector.loadFromUri(modelUrl).catch(onLoadErr),
-      //faceapi.nets.mtcnn.loadFromUri(modelUrl).catch(onLoadErr)
+      // faceapi.nets.tinyFaceDetector.loadFromUri(modelUrl).catch(onLoadErr),
+      // faceapi.nets.mtcnn.loadFromUri(modelUrl).catch(onLoadErr)
+
+      faceapi.nets.faceLandmark68Net.loadFromUri(modelUrl).catch(onLoadErr),
+      // faceapi.nets.faceLandmark68TinyNet.loadFromUri(modelUrl).catch(onLoadErr),
     ]).then(async () => {
       this.modelsLoading = false;
       this.modelsLoaded = !failed;
@@ -45,10 +40,10 @@ export default {
   },
   detectPic(img, canvasModel, realImgInfo, callback, onFailed) {
     const process = async () => {
-      //设置需要使用什么算法和参数进行扫描识别图片的人脸特征
+      // Set models and hyper-parameters
       const options = new faceapi.SsdMobilenetv1Options({ minConfidence: 0.2 })
-      //const options = new faceapi.TinyFaceDetectorOptions({ inputSize: 160, scoreThreshold: 0.3})
-      //const options = new faceapi.MtcnnOptions()
+      // const options = new faceapi.TinyFaceDetectorOptions({ inputSize: 160, scoreThreshold: 0.3})
+      // const options = new faceapi.MtcnnOptions()
       let result = await faceapi.detectSingleFace(img, options).withFaceLandmarks()
       console.log(result)
       if (result) {

@@ -29,13 +29,13 @@ export default {
   },
   methods: {
     addImg() {
+      // Get file data via raw DOM
       let inputDOM = this.$refs.inputer;
-      // 通过DOM取文件数据
       if (inputDOM.files.length == 1) {
         /*
         let size = Math.floor(inputDOM.files[0].size / 1024);
         if (size > 5 * 1024 * 1024) {
-          alert('请选择5M以内的图片！');
+          alert('The size of image should be less than 5M!');
           return false;
         }
         */
