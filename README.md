@@ -20,7 +20,7 @@ The project uses [face-api.js](https://github.com/justadudewhohacks/face-api.js)
 The face detection task uses the SSD MobileNet V1 model (trained with the [WIDERFACE dataset](http://mmlab.ie.cuhk.edu.hk/projects/WIDERFace)), and the facial landmark detection task uses a 68-point CNN-based detection model built by the author of face-api.js (the training dataset contains about 35,000 facial images). The models' weight data comes from face-api.js.  
 
 ## Automatic Selection and Positioning of Mask Stickers
-The project contains several mask sticker images and data for each mask. Take three key points on each mask sticker (upper left corner, upper right corner, and bottom of chin). After detecting the landmarks on the user's avatar, automatically select the mask sticker that best matches the face shape based on these data, and calculate the corresponding geometric transformation, then put the sticker image in the appropriate position on the avatar.  
+The project contains several mask sticker images and data for each mask. Three key points were marked on each mask sticker (upper left corner, upper right corner, and bottom of chin). After detecting the landmarks on the user's avatar, the mask sticker that best matches the face shape can be automatically selected based on these data. After calculating the corresponding geometric transformation, the sticker image will be put in the appropriate position on the avatar.  
 ![mask example](https://raw.githubusercontent.com/zamhown/wear-a-mask/master/assets/mask-example.png)  
 
 ## Image Editor With Sticker Editing Function
